@@ -2,16 +2,23 @@ const connector = require("../config/connection");
 
 class ORM {
 
-     constructor() {
-       this.initialize();
+    constructor() {
     }
 
-    async initialize(){
-      this.connection = await connector.connect();
+    async initialize() {
+        try {
+
+            this.connection = await connector.connect();
+        } catch (error) {
+            console.error(`Couldn't connect to the database \n ${error}`);
+        }
     }
 
     selectAll(table_name) {
         return new Promise(async (resolve, reject) => {
+            if (!this.connection)
+                await this.initialize();
+
             let query = `SELECT * from ${table_name}`;
             try {
 
@@ -28,6 +35,10 @@ class ORM {
 
     insertOne(table_name, columns, values) {
         return new Promise(async (resolve, reject) => {
+
+            if (!this.connection)
+                await this.initialize();
+
             let query = `INSERT INTO ${table_name} (${columns}) VALUES (${values})`;
 
             try {
@@ -43,8 +54,11 @@ class ORM {
 
 
     updateOne(table_name, columns, condition) {
-
         return new Promise(async (resolve, reject) => {
+
+            if (!this.connection)
+                await this.initialize();
+                
             let query = `UPDATE ${table_name} SET ${columns} WHERE ${condition}`;
 
             try {

@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,8 +17,8 @@ app.engine(".hbs", handlebars(
   {
     defaultLayout: "main",
     extname: ".hbs",
-    layoutsDir: __dirname + '\\views\\layouts\\',
-    partialsDir: __dirname + '\\views\\partials\\'
+    layoutsDir: path.join(__dirname, '/views/layouts/'),
+    partialsDir: path.join(__dirname + '/views/partials/')
   }));
 
 app.set("view engine", ".hbs");
